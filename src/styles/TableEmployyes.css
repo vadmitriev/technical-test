@@ -1,0 +1,42 @@
+/* emp-table */
+
+.emp-table {
+    width: 95vw;
+    height: 90vh;
+}
+.emp-table .ant-table-thead,
+.emp-table .ant-table-tbody {
+    flex: 1;
+}
+
+.emp-table .ant-table-thead > tr > th,
+.emp-table .ant-table-tbody > tr > td {
+    padding-right: 24px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    /*max-width: 24px;*/
+}
+
+.emp-table .ant-table-tbody > tr > td {
+    line-height: 13px;
+    border-style: solid;
+    border-width: 1px 0 0;
+    border-color: #cfcfcf;
+}
+
+.ant-form-horizontal .ant-form-item-label {
+    text-align: left;
+    display: inline-block;
+}
+.ant-form-item-label label{
+    text-align: left;
+    /*font-size: 10px;*/
+    /*padding-left:26px;*/
+    /*width:125px;*/
+    /*text-transform: uppercase;*/
+    /*display:inline-block;*/
+    /*margin-right: 20px;*/
+    /*width:200px;*/
+    /*width: 550px;*/
+}
