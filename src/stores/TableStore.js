@@ -1,7 +1,7 @@
 import {action, computed, makeObservable, observable, runInAction} from 'mobx'
-import {deleteUndefinedKeys, promise} from '../util'
+import {promise} from '../util'
 import {initialEmployees} from '../components/EmployeeTable/constant/initialData'
-import {defaultEmp} from '../components/EmployeeTable/constant/constant'
+import {defaultEmp, modalsTitles} from '../components/EmployeeTable/constant/constant'
 
 const listNameInLC = 'store'
 
@@ -10,6 +10,8 @@ class TableStore {
     appLoaded = false
     token = null
     visibleModal = false
+    visibleAttrModal = false
+    visibleCollegsModal = false
     employeeList = []
     employee = undefined
     actionName = ''
@@ -20,6 +22,8 @@ class TableStore {
             appLoaded: observable,
             token: observable,
             visibleModal: observable,
+            visibleAttrModal: observable,
+            visibleCollegsModal: observable,
             employeeList: observable,
             employee: observable,
             actionName: observable,
@@ -27,6 +31,8 @@ class TableStore {
             clearList: action,
             deleteEmployee: action,
             setVisible: action,
+            setVisibleCollegs: action,
+            setVisibleAttrs: action,
             showModal: action,
             addEmployee: action,
             editEmployee: action,
@@ -38,6 +44,8 @@ class TableStore {
             setError: action,
             saveInLC: action,
             wasFired: action,
+            setAttrValues: action,
+            setCollegs: action
         })
 
     }
@@ -68,17 +76,7 @@ class TableStore {
         this.isLoading = true
         return promise(() => {
             data.id = this.employeeList.length
-            // console.log('keys before:', Object.keys(data))
-            //
-            // const filteredData = Object.keys(data)
-            //     .filter(key => {
-            //         console.log('datakey=', key, 'default include:', Object.keys(defaultEmp).includes(key))
-            //         Object.keys(defaultEmp).includes(key)
-            //     })
-            //     .map(key1 => data[key1])
-            // console.log('keys before:', Object.keys(data))
-            // data = deleteUndefinedKeys(data)
-            // console.log('keys after:', Object.keys(data))
+
             this.employee = data
             this.employeeList.push(data)
             this.saveInLC()
@@ -114,7 +112,6 @@ class TableStore {
                 this.saveInLC()
                 this.isLoading = false
             }))
-
     }
 
     deleteEmployee(id) {
@@ -130,20 +127,48 @@ class TableStore {
         this.visibleModal = flag
     }
 
+    setVisibleCollegs(flag) {
+        this.visibleCollegsModal = flag
+    }
+
+    setVisibleAttrs(flag) {
+        this.visibleAttrModal = flag
+    }
+
     showModal(actionName, emp) {
         this.actionName = actionName
         if (emp) {
             this.employee = emp
             console.log('emp id:', emp.id)
         }
-
-        this.setVisible(true)
+        switch (this.actionName) {
+            case modalsTitles.attr:
+                this.setVisibleAttrs(true)
+                break
+            case modalsTitles.collegs:
+                this.setVisibleCollegs(true)
+                break
+            default:
+                this.setVisible(true)
+        }
     }
 
     get modalTitle() {
-        return this.actionName && this.actionName === "create"
-            ? "Добавить работника"
-            : "Изменить данные работника"
+        if (!this.actionName) {
+            return 'Редактировать данные'
+        }
+        switch (this.actionName) {
+            case modalsTitles.create:
+                return 'Добавить работника'
+            case modalsTitles.edit:
+                return 'Изменить данные работника'
+            case modalsTitles.attr:
+                return 'Добавить атрибут'
+            case modalsTitles.collegs:
+                return 'Коллеги работника'
+            default:
+                return 'Изменить данные'
+        }
     }
 
     calcShortName(emp) {
@@ -175,6 +200,40 @@ class TableStore {
     hasAccess(emp) {
         const index = this.findIndex(emp)
         return this.employeeList[index].hasAccess
+    }
+
+    setAttrValues(newAttr) {
+        if (!this.employee) {
+            return
+        }
+        this.isLoading = true
+        return promise(() => {
+            console.log('new attrs:', newAttr)
+            console.log('old attr',this.employee.attributes)
+
+            // this.employee.attributes.push(newAttr)
+
+            this.setVisibleAttrs(false)
+            this.saveInLC()
+            this.isLoading = false
+        }, 700)
+    }
+
+    setCollegs(collegs) {
+        if (!this.employee) {
+            return
+        }
+        this.isLoading = true
+        return promise(() => {
+            console.log('new collegs:', collegs)
+            console.log('collegs ids:',this.employee.collegsIds)
+
+            // this.employee.collegs.push(collegs)
+
+            this.saveInLC()
+            this.setVisibleCollegs(false)
+            this.isLoading = false
+        }, 700)
     }
 
     setError({message}) {

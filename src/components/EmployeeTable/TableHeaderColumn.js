@@ -2,6 +2,7 @@ import {sorterFields} from '../../util'
 import {Button, Popconfirm, Space, Tag, message, Tooltip} from 'antd'
 import {CloseOutlined, EditOutlined, PlusSquareOutlined, UnorderedListOutlined} from '@ant-design/icons'
 import {action} from 'mobx'
+import {modalsTitles} from './constant/constant'
 
 
 export const TableHeaderColumns = (store) => {
@@ -104,7 +105,7 @@ export const TableHeaderColumns = (store) => {
                                 size="small"
                                 icon={<UnorderedListOutlined />}
                                 onClick={action(() =>
-                                    store.showModal("edit", employee)
+                                    store.showModal(modalsTitles.collegs, employee)
                                 )}
                             >
                             </Button>
@@ -126,7 +127,7 @@ export const TableHeaderColumns = (store) => {
                                 size="small"
                                 icon={<EditOutlined/>}
                                 onClick={action(() =>
-                                    store.showModal("edit", employee)
+                                    store.showModal(modalsTitles.edit, employee)
                                 )}
                             >
                             </Button>
@@ -137,7 +138,7 @@ export const TableHeaderColumns = (store) => {
                                 size="small"
                                 icon={<PlusSquareOutlined/>}
                                 onClick={action(() =>
-                                    store.showModal("edit", employee)
+                                    store.showModal(modalsTitles.attr, employee)
                                 )}
                             >
                             </Button>

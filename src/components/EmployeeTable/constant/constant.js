@@ -1,3 +1,10 @@
+export const attrFields = {
+    id: 0,
+    name: 'name',
+    type: 'type',
+    value: 'value'
+}
+
 export const empAttrTypes = {
     string: 'Строка',
     number: 'Число',
@@ -33,4 +40,11 @@ export const defaultEmp = {
     hasAccess: false,
     collegsIds: [],
     attributes: []
+}
+
+export const modalsTitles = {
+    edit: 'edit',
+    create: 'create',
+    attr: 'attr',
+    collegs: 'collegs'
 }

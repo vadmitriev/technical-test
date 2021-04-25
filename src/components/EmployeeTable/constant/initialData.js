@@ -37,9 +37,9 @@ export const initialEmployees = [
             3
         ],
         attributes: [
-            {name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Lexus'},
-            {name: 'Количество детей', type: empAttrTypes.number, value: 2},
-            {name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.06.2021'},
+            {id: 0, name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Lexus'},
+            {id: 1, name: 'Количество детей', type: empAttrTypes.number, value: 2},
+            {id: 2, name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.06.2021'},
         ]
     },
     {
@@ -55,9 +55,9 @@ export const initialEmployees = [
         hasAccess: true,
         collegsIds: [],
         attributes: [
-            {name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Ford'},
-            {name: 'Количество детей', type: empAttrTypes.number, value: 1},
-            {name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.07.2021'},
+            {id: 0, name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Ford'},
+            {id: 1, name: 'Количество детей', type: empAttrTypes.number, value: 1},
+            {id: 2, name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.07.2021'},
         ]
     },
     {
@@ -73,9 +73,9 @@ export const initialEmployees = [
         hasAccess: false,
         collegsIds: [4],
         attributes: [
-            {name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Toyota'},
-            {name: 'Количество детей', type: empAttrTypes.number, value: 0},
-            {name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.07.2021'},
+            {id: 0, name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Toyota'},
+            {id: 1, name: 'Количество детей', type: empAttrTypes.number, value: 0},
+            {id: 2, name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.07.2021'},
         ]
     },
     {
@@ -91,9 +91,9 @@ export const initialEmployees = [
         hasAccess: false,
         collegsIds: [3],
         attributes: [
-            {name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Ford'},
-            {name: 'Количество детей', type: empAttrTypes.number, value: 0},
-            {name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.08.2021'},
+            {id: 0, name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Ford'},
+            {id: 1, name: 'Количество детей', type: empAttrTypes.number, value: 0},
+            {id: 2, name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.08.2021'},
         ]
     },
     {

@@ -9,9 +9,9 @@ import {
     Select, Button, message,
 } from 'antd'
 import {observer} from 'mobx-react'
-import {dateFormat, genders, positionTypes} from '../components/EmployeeTable/constant/constant'
+import {dateFormat, genders, positionTypes} from '../../components/EmployeeTable/constant/constant'
 import moment from 'moment'
-import {ModalStore} from '../stores/ModalStore'
+import {ModalStore} from '../../stores/ModalStore'
 import {action} from 'mobx'
 
 const modalStore = new ModalStore()
@@ -37,13 +37,6 @@ const EmployeeModalForm = observer(({store}) => {
         return !flag
     }
 
-    // const [form] = Form.useForm()
-
-    // const handleSubmit = (e) => {
-    //     let form_vals = form.getFieldsValue()
-    //     console.log('form_vals:', form_vals)
-    // }
-
     return (
         <Modal
             // form={form}
@@ -51,24 +44,6 @@ const EmployeeModalForm = observer(({store}) => {
             title={store.modalTitle}
             okText="Сохранить"
             cancelText="Отмена"
-            onCancel={() => {
-                store.setVisible(false)
-                // modalStore.clear()
-            }}
-            onOk={() => {
-                // modalStore.clear()
-                console.log('ok pressed')
-                // form
-                //     .validateFields()
-                //     .then(async (values) => {
-                //         // form.resetFields()
-                //         console.log('onCreate values:', values)
-                //         await onCreate(values)
-                //     })
-                //     .catch((info) => {
-                //         console.log('Validate Failed:', info)
-                //     });
-            }}
             footer={[
                 <Button
                     key="cancel"
@@ -79,32 +54,19 @@ const EmployeeModalForm = observer(({store}) => {
                 <Button
                     key="submit"
                     type="primary"
-                    // enabled={() => {
-                    //     console.log(modalStore.isFormValid)
-                    // }}
                     disabled={modalStore.isFormValid}
-                    // onClick={action(() => {
-                    //     console.log('ok clicked')
-                    // })}
                     onClick={action(
                         async () => {
                             store.setValues(modalStore.employee)
                                 .then(message.info(`Работник был добавлен`))
-                                // .catch(message.warn(`Не удалось добавить работника ${modalStore.employee.surname}`))
                         }
                     )}
-                // () => {
-                //         // modalStore.confirmForm()
-                //         console.log(modalStore.isFormValid)
-                //         console.log('ok clicked')
-                //     }}
                 >
                     Сохранить
                 </Button>
             ]}
         >
             <Form
-                // form={form}
                 labelCol={{
                     span: 4,
                 }}
@@ -167,7 +129,6 @@ const EmployeeModalForm = observer(({store}) => {
                         placeholder="Выберите должность"
                         // defaultValue={store.employee ? store.employee.position : positionTypes.developer}
                         style={{width: 200}}
-                        // onChange={(value) => modalStore.selectChangeHandler(value, "position")}
                         onChange={(value, event) => modalStore.selectChangeHandler(value, event, "position")}
                     >
                         {positions}
@@ -245,7 +206,6 @@ const EmployeeModalForm = observer(({store}) => {
                         mode="multiple"
                         style={{width: 200}}
                         placeholder="Выберите коллег"
-                        // onChange={handleChange}
                         optionLabelProp="label"
                         allowClear="true"
                         onChange={(value) => modalStore.selectChangeHandler(value, "collegsIds")}
@@ -257,6 +217,5 @@ const EmployeeModalForm = observer(({store}) => {
         </Modal>
     )
 })
-
 
 export default EmployeeModalForm
