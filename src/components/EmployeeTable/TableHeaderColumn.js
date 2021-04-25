@@ -126,7 +126,7 @@ export const TableHeaderColumns = (store) => {
                                 size="small"
                                 icon={<EditOutlined/>}
                                 onClick={action(() =>
-                                    store.showModal({action: "edit", employee})
+                                    store.showModal("edit", employee)
                                 )}
                             >
                             </Button>
@@ -137,7 +137,7 @@ export const TableHeaderColumns = (store) => {
                                 size="small"
                                 icon={<PlusSquareOutlined/>}
                                 onClick={action(() =>
-                                    store.showModal({action: "edit", employee})
+                                    store.showModal("edit", employee)
                                 )}
                             >
                             </Button>
@@ -146,8 +146,7 @@ export const TableHeaderColumns = (store) => {
                             <Popconfirm
                                 placement="topLeft"
                                 title={() => {
-                                    // const shortName = `${employee.surname} ${employee.name[0]}.${employee.fatherName[0]}`
-                                    return `Удалить работника ${store.shortName}?`
+                                    return `Удалить работника ${employee.surname}?`
                                 }}
                                 onConfirm={action(
                                     async () => {

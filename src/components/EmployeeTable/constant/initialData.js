@@ -18,11 +18,11 @@
 */
 
 
-import {empAttrTypes, positionTypes, genders} from './types'
+import {empAttrTypes, positionTypes, genders} from './constant'
 
 export const initialEmployees = [
     {
-        id: 1,
+        id: 0,
         surname: 'Афанасьев',
         name: 'Андрей',
         fatherName: 'Андреевич',
@@ -43,7 +43,7 @@ export const initialEmployees = [
         ]
     },
     {
-        id: 2,
+        id: 1,
         surname: 'Беглов',
         name: 'Борис',
         fatherName: 'Борисович',
@@ -61,7 +61,7 @@ export const initialEmployees = [
         ]
     },
     {
-        id: 3,
+        id: 2,
         surname: 'Васильева',
         name: 'Виктория',
         fatherName: 'Васильевна',
@@ -79,7 +79,7 @@ export const initialEmployees = [
         ]
     },
     {
-        id: 4,
+        id: 3,
         surname: 'Гринев',
         name: 'Геннадий',
         fatherName: 'Геннадьевич',
@@ -97,7 +97,7 @@ export const initialEmployees = [
         ]
     },
     {
-        id: 5,
+        id: 4,
         surname: 'Данилко',
         name: 'Даниил',
         fatherName: 'Денисович',

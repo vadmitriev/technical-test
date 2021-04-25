@@ -16,24 +16,24 @@ export const expandedRowRender = (store) => {
                 console.log('id:', item.id)
                 return (
                     <Space key={item.id}>
-                        <Tooltip placement="topLeft" title="Редактировать">
-                            <Button
-                                shape="round"
-                                size="small"
-                                icon={<EditOutlined/>}
-                                onClick={action((item) => {
-                                    console.log('id:', item.id)
-                                    store.showModal("edit", item)
-                                    // console.log('edit attributes')
-                                })}
-                            >
-                            </Button>
-                        </Tooltip>
+                        {/*<Tooltip placement="topLeft" title="Редактировать">*/}
+                        {/*    <Button*/}
+                        {/*        shape="round"*/}
+                        {/*        size="small"*/}
+                        {/*        icon={<EditOutlined/>}*/}
+                        {/*        onClick={action((item) => {*/}
+                        {/*            console.log('id:', item.id)*/}
+                        {/*            // store.showModal("edit", item)*/}
+                        {/*            // console.log('edit attributes')*/}
+                        {/*        })}*/}
+                        {/*    >*/}
+                        {/*    </Button>*/}
+                        {/*</Tooltip>*/}
                         <Tooltip placement="topLeft" title="Удалить">
                             <Popconfirm
                                 placement="topLeft"
                                 title={() => {
-                                    const surname = 'test'
+                                    const surname = item.surname
                                     return `Вы уверены что хотите удалить ${surname}?`
                                 }}
                                 onConfirm={action(

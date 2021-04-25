@@ -6,21 +6,11 @@ import store from '../../stores/TableStore'
 import {TableEmployees} from '../../views/TableEmployyees'
 
 export const App = observer(class extends Component {
-    componentWillMount() {
-        // if (!store.token) {
-        //     store.setAppLoaded()
-        // }
-    }
-
     componentDidMount() {
-        // if (store.token) {
-        //     console.log('token')
-        // }
         store.setAppLoaded()
     }
 
     render() {
-        console.log('render')
         if (store.appLoaded) {
             return <TableEmployees store={store}/>
         }

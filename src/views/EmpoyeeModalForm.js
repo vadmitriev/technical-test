@@ -6,16 +6,19 @@ import {
     Radio,
     Checkbox,
     DatePicker,
-    Select,
+    Select, Button, message,
 } from 'antd'
 import {observer} from 'mobx-react'
-import {genders, positionTypes} from '../components/EmployeeTable/constant/types'
+import {dateFormat, genders, positionTypes} from '../components/EmployeeTable/constant/constant'
 import moment from 'moment'
+import {ModalStore} from '../stores/ModalStore'
+import {action} from 'mobx'
+
+const modalStore = new ModalStore()
 
 const EmployeeModalForm = observer(({store}) => {
-    // const [form] = Form.useForm()
 
-    const dateFormat = 'DD.MM.YYYY';
+    // const [form] = Form.useForm()
 
     const positions = Object.values(positionTypes).map(pos => {
         return <Select.Option value={pos} key={pos}>{pos}</Select.Option>
@@ -23,31 +26,23 @@ const EmployeeModalForm = observer(({store}) => {
 
     const grs = Object.values(genders).map(g => {
         return <Radio value={g} key={g}>{g}</Radio>
-        // return <Select.Option value={g}>{g}</Select.Option>
     })
 
     const coworkers = store.coworkersShortNames.map(name => {
         return <Select.Option value={name}>{name}</Select.Option>
     })
 
-    function updateProperty(key, value) {
-        console.log('key:', key, 'value:', value)
+    const checkBoxHandler = (event, id) => {
+        const flag = event.target.checked
+        return !flag
     }
 
-    function changeHandler(event) {
-        console.log('event:', event, 'type:', typeof event)
+    // const [form] = Form.useForm()
 
-        updateProperty(event.target.name, event.target.value)
-    }
-
-    function onChangeDate(date, dateString, id) {
-        console.log('date:', date, 'dateString:', dateString, 'id:', id)
-        // console.log('changeData key:', key)
-        // console.log('changeDate value:', moment(value).toDate())
-
-    }
-
-    console.log('store:', store)
+    // const handleSubmit = (e) => {
+    //     let form_vals = form.getFieldsValue()
+    //     console.log('form_vals:', form_vals)
+    // }
 
     return (
         <Modal
@@ -56,8 +51,12 @@ const EmployeeModalForm = observer(({store}) => {
             title={store.modalTitle}
             okText="Сохранить"
             cancelText="Отмена"
-            onCancel={() => store.setVisible(false)}
+            onCancel={() => {
+                store.setVisible(false)
+                // modalStore.clear()
+            }}
             onOk={() => {
+                // modalStore.clear()
                 console.log('ok pressed')
                 // form
                 //     .validateFields()
@@ -70,8 +69,42 @@ const EmployeeModalForm = observer(({store}) => {
                 //         console.log('Validate Failed:', info)
                 //     });
             }}
+            footer={[
+                <Button
+                    key="cancel"
+                    onClick={() => store.setVisible(false)}
+                >
+                    Отмена
+                </Button>,
+                <Button
+                    key="submit"
+                    type="primary"
+                    // enabled={() => {
+                    //     console.log(modalStore.isFormValid)
+                    // }}
+                    disabled={modalStore.isFormValid}
+                    // onClick={action(() => {
+                    //     console.log('ok clicked')
+                    // })}
+                    onClick={action(
+                        async () => {
+                            store.setValues(modalStore.employee)
+                                .then(message.info(`Работник был добавлен`))
+                                // .catch(message.warn(`Не удалось добавить работника ${modalStore.employee.surname}`))
+                        }
+                    )}
+                // () => {
+                //         // modalStore.confirmForm()
+                //         console.log(modalStore.isFormValid)
+                //         console.log('ok clicked')
+                //     }}
+                >
+                    Сохранить
+                </Button>
+            ]}
         >
             <Form
+                // form={form}
                 labelCol={{
                     span: 4,
                 }}
@@ -90,9 +123,9 @@ const EmployeeModalForm = observer(({store}) => {
                     <Input
                         name="surname"
                         placeholder="Фамилия"
-                        defaultValue={store.employee ? store.employee.surname : "Фамилия"}
+                        // defaultValue={store.employee ? store.employee.surname : "Фамилия"}
                         style={{width: 200}}
-                        onChange={changeHandler}
+                        onChange={(e) => modalStore.changeHandler(e)}
                     />
                 </Form.Item>
                 <Form.Item
@@ -104,9 +137,9 @@ const EmployeeModalForm = observer(({store}) => {
                     <Input
                         name="name"
                         placeholder="Имя"
-                        defaultValue={store.employee ? store.employee.name : "Имя"}
-                        onChange={changeHandler}
+                        // defaultValue={store.employee ? store.employee.name : "Имя"}
                         style={{width: 200}}
+                        onChange={(e) => modalStore.changeHandler(e)}
                     />
                 </Form.Item>
                 <Form.Item
@@ -117,9 +150,9 @@ const EmployeeModalForm = observer(({store}) => {
                     <Input
                         name="fatherName"
                         placeholder="Отчество"
-                        defaultValue={store.employee ? store.employee.fatherName : "Отчество"}
+                        // defaultValue={store.employee ? store.employee.fatherName : "Отчество"}
                         style={{width: 200}}
-                        onChange={changeHandler}
+                        onChange={(e) => modalStore.changeHandler(e)}
                     />
                 </Form.Item>
                 <Form.Item
@@ -127,14 +160,15 @@ const EmployeeModalForm = observer(({store}) => {
                     label="Должность"
                     rules={[{required: true, message: 'Необходимо указать должность'}]}
                     style={{width: 1100}}
-                    onChange={changeHandler}
+                    onChange={(value) => modalStore.selectChangeHandler(value, "position")}
                 >
                     <Select
                         name="position"
                         placeholder="Выберите должность"
-                        defaultValue={store.employee ? store.employee.position : positionTypes.developer}
+                        // defaultValue={store.employee ? store.employee.position : positionTypes.developer}
                         style={{width: 200}}
-                        onChange={changeHandler}
+                        // onChange={(value) => modalStore.selectChangeHandler(value, "position")}
+                        onChange={(value, event) => modalStore.selectChangeHandler(value, event, "position")}
                     >
                         {positions}
                     </Select>
@@ -149,9 +183,9 @@ const EmployeeModalForm = observer(({store}) => {
                         name="birthday"
                         format={dateFormat}
                         placeholder="Выберите дату"
-                        defaultValue={store.employee ? store.employee.birthday : moment('01.01.1990', dateFormat)}
+                        // initialValue={store.employee ? store.employee.birthday : moment('01.01.1990', dateFormat)}
                         style={{width: 200}}
-                        onChange={(date, dateString) => onChangeDate(date, dateString, "birthday")}
+                        onChange={(date, dateString) => modalStore.dateChangeHandler(date, dateString, "birthday")}
                     />
                 </Form.Item>
                 <Form.Item
@@ -159,14 +193,8 @@ const EmployeeModalForm = observer(({store}) => {
                     label="Пол"
                     rules={[{required: true, message: 'Необходимо выбрать пол'}]}
                     style={{width: 1100}}
-                    onChange={changeHandler}
+                    onChange={(value) => modalStore.selectChangeHandler(value, "gender")}
                 >
-                    {/*<Select*/}
-                    {/*    placeholder="Выберите пол"*/}
-                    {/*    allowClear*/}
-                    {/*>*/}
-                    {/*    {grs}*/}
-                    {/*</Select>*/}
                     <Radio.Group>
                         {grs}
                     </Radio.Group>
@@ -180,9 +208,9 @@ const EmployeeModalForm = observer(({store}) => {
                     <DatePicker
                         format={dateFormat}
                         placeholder="Выберите дату"
-                        defaultValue={store.employee ? store.employee.inDate : moment('01.01.2021', dateFormat)}
+                        // initialValue={store.employee ? store.employee.inDate : moment('01.01.2021', dateFormat)}
                         style={{width: 200}}
-                        onChange={(date, dateString) => onChangeDate(date, dateString, "inDate")}
+                        onChange={(date, dateString) => modalStore.dateChangeHandler(date, dateString, "inDate")}
                     />
                 </Form.Item>
                 <Form.Item
@@ -193,26 +221,25 @@ const EmployeeModalForm = observer(({store}) => {
                     <DatePicker
                         format={dateFormat}
                         placeholder="Выберите дату"
-                        defaultValue={store.employee ? store.employee.outDate : moment()}
+                        // initialValue={store.employee ? store.employee.outDate : moment()}
                         style={{width: 200}}
-                        onChange={(date, dateString) => onChangeDate(date, dateString, "outDate")}
+                        onChange={(date, dateString) => modalStore.dateChangeHandler(date, dateString, "outDate")}
                     />
                 </Form.Item>
                 <Form.Item
                     name="hasAccess"
                     label="Наличие прав"
                     style={{width: 1100}}
-                    onChange={changeHandler}
                 >
                     <Checkbox
-                        checked={store.employee && store.employee.hasAccess}
+                        onChange={(value) => modalStore.checkBoxChangeHandler(value, "hasAccess")}
                     />
                 </Form.Item>
                 <Form.Item
                     name="collegsIds"
                     label="Коллеги"
                     style={{width: 1100}}
-                    onChange={changeHandler}
+                    onChange={(value) => modalStore.selectChangeHandler(value, "collegsIds")}
                 >
                     <Select
                         mode="multiple"
@@ -221,7 +248,7 @@ const EmployeeModalForm = observer(({store}) => {
                         // onChange={handleChange}
                         optionLabelProp="label"
                         allowClear="true"
-                        onChange={changeHandler}
+                        onChange={(value) => modalStore.selectChangeHandler(value, "collegsIds")}
                     >
                         {coworkers}
                     </Select>

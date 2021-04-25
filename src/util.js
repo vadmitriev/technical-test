@@ -17,3 +17,7 @@ export async function promise(func, ms) {
         setTimeout(() => resolve(func()), ms)
     })
 }
+
+export function deleteUndefinedKeys(obj) {
+    return Object.keys(obj).map(key => key === 'undefined' && delete obj[key])
+}

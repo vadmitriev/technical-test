@@ -29,6 +29,9 @@
     text-align: left;
     display: inline-block;
 }
+.ant-form-item-control-input-content {
+    max-width: 500px;
+}
 .ant-form-item-label label{
     text-align: left;
     /*font-size: 10px;*/

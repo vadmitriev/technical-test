@@ -1,6 +1,7 @@
 import {action, computed, makeObservable, observable, runInAction} from 'mobx'
-import {promise} from '../util'
+import {deleteUndefinedKeys, promise} from '../util'
 import {initialEmployees} from '../components/EmployeeTable/constant/initialData'
+import {defaultEmp} from '../components/EmployeeTable/constant/constant'
 
 const listNameInLC = 'store'
 
@@ -46,9 +47,14 @@ class TableStore {
     }
 
     setAppLoaded() {
-        const stateInLC = localStorage.getItem(listNameInLC)
-        this.employeeList = JSON.parse(stateInLC) ?? initialEmployees
-        this.saveInLC()
+        this.isLoading = true
+        this.setVisible(false)
+        setTimeout(() => {
+            const stateInLC = localStorage.getItem(listNameInLC)
+            this.employeeList = JSON.parse(stateInLC) ?? initialEmployees
+            this.saveInLC()
+            this.isLoading = false
+        }, 500)
         this.appLoaded = true
     }
 
@@ -58,40 +64,57 @@ class TableStore {
         this.isLoading = false
     }
 
-    addEmployee(newEmp) {
+    addEmployee({data}) {
         this.isLoading = true
-        return promise(() => ({data: newEmp}), 1500)
+        return promise(() => {
+            data.id = this.employeeList.length
+            // console.log('keys before:', Object.keys(data))
+            //
+            // const filteredData = Object.keys(data)
+            //     .filter(key => {
+            //         console.log('datakey=', key, 'default include:', Object.keys(defaultEmp).includes(key))
+            //         Object.keys(defaultEmp).includes(key)
+            //     })
+            //     .map(key1 => data[key1])
+            // console.log('keys before:', Object.keys(data))
+            // data = deleteUndefinedKeys(data)
+            // console.log('keys after:', Object.keys(data))
+            this.employee = data
+            this.employeeList.push(data)
+            this.saveInLC()
+            this.isLoading = false
+        }, 500)
+    }
+
+    editEmployee(emp) {
+        runInAction(() => {
+            this.employeeList[emp.id] = emp.data
+        })
+        this.saveInLC()
+    }
+
+    setValues(emp) {
+        console.log('setValues:', {emp})
+        this.setVisible(false)
+
+        return promise(() => ({data: {...emp}}), 500)
             .then(action(data => {
-                this.employee = data
-                this.employeeList.push(data)
+                console.log('emp aaa:', emp)
+                console.log('data:', data)
+                if (this.actionName === 'create') {
+                    data.id = this.employeeList.length
+                    this.addEmployee(data)
+                } else {
+                    data.id = this.employee.id
+                    this.editEmployee(data)
+                }
             }))
             .catch(action(err => this.setError(err)))
             .finally(action(() => {
                 this.saveInLC()
                 this.isLoading = false
             }))
-        // this.employee = newEmp
-        // this.employeeList.push(newEmp)
-        // this.isLoading = false
-    }
 
-    editEmployee(emp) {
-        const index = this.findIndex(emp)
-        runInAction(() => {
-            this.employeeList[index] = emp
-        })
-        this.saveInLC()
-    }
-
-    setValues(values) {
-        console.log('setValues:', values)
-        // this.setVisible(false)
-        const emp = {...values, id: this.employee.id}
-        if (this.actionName === 'create') {
-            this.addEmployee(emp)
-        } else {
-            this.editEmployee(emp)
-        }
     }
 
     deleteEmployee(id) {
@@ -107,11 +130,13 @@ class TableStore {
         this.visibleModal = flag
     }
 
-    showModal(action, emp) {
-        console.log('showModal:', action, emp)
-        console.log('emp id:', emp)
-        this.actionName = action
-        this.employee = emp
+    showModal(actionName, emp) {
+        this.actionName = actionName
+        if (emp) {
+            this.employee = emp
+            console.log('emp id:', emp.id)
+        }
+
         this.setVisible(true)
     }
 
