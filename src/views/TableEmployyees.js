@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {observer, Observer} from 'mobx-react'
+import {observer} from 'mobx-react'
 import {
     Row,
     Col,
@@ -15,7 +15,7 @@ import EmployeeModalForm from './Modals/EmpoyeeModalForm'
 import {TableHeaderColumns} from '../components/EmployeeTable/TableHeaderColumn'
 import {expandedRowRender} from '../components/EmployeeTable/ExtenderTableRow'
 import {AddEmployeeButton} from '../components/EmployeeTable/AddEmployeeButton'
-import CollegasModalForm from './Modals/CollegasModalForm'
+import CoworkersModalForm from './Modals/CoworkersModalForm'
 import AttributesEditModalForm from './Modals/AttributesEditModalForm'
 
 const loadingIcon = <SyncOutlined style={{fontSize: 32}} spin/>
@@ -24,18 +24,13 @@ export const TableEmployees = observer(class extends Component {
     render() {
         const {store} = this.props
 
-        const pagination = store.employeeList && store.employeeList.length > 10
-            ? {defaultPageSize: 10, showLessItems: true}
-            : false
-
         const columns = TableHeaderColumns(store)
-        // const extTable = new expandedRowRender(store)
 
         return (
             <Space direction="vertical" style={{padding: 20}}>
                 <AddEmployeeButton store={store}/>
                 <EmployeeModalForm store={store}/>
-                <CollegasModalForm store={store}/>
+                <CoworkersModalForm store={store}/>
                 <AttributesEditModalForm store={store}/>
                 <Row type="flex" className="flex-item-grow">
                     <Col span={24}>

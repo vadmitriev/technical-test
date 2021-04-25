@@ -1,8 +1,6 @@
 import {Button, Popconfirm, Space, Table, Tooltip} from 'antd'
-import {CloseOutlined, EditOutlined} from '@ant-design/icons'
+import {CloseOutlined} from '@ant-design/icons'
 import {action} from 'mobx'
-import {observer, Observer} from 'mobx-react'
-import {Component} from 'react'
 
 export const expandedRowRender = ((store) => {
         const columns = [

@@ -1,7 +1,7 @@
 import {action, computed, makeObservable, observable, runInAction} from 'mobx'
 import {promise} from '../util'
 import {initialEmployees} from '../components/EmployeeTable/constant/initialData'
-import {defaultEmp, modalsTitles} from '../components/EmployeeTable/constant/constant'
+import {modalsTitles} from '../components/EmployeeTable/constant/constant'
 
 const listNameInLC = 'store'
 
@@ -11,7 +11,7 @@ class TableStore {
     token = null
     visibleModal = false
     visibleAttrModal = false
-    visibleCollegsModal = false
+    visibleCoworkersModal = false
     employeeList = []
     employee = undefined
     actionName = ''
@@ -23,15 +23,16 @@ class TableStore {
             token: observable,
             visibleModal: observable,
             visibleAttrModal: observable,
-            visibleCollegsModal: observable,
+            visibleCoworkersModal: observable,
             employeeList: observable,
             employee: observable,
             actionName: observable,
             setAppLoaded: action,
             clearList: action,
+            clearCurrent: action,
             deleteEmployee: action,
             setVisible: action,
-            setVisibleCollegs: action,
+            setVisibleCoworkers: action,
             setVisibleAttrs: action,
             showModal: action,
             addEmployee: action,
@@ -45,7 +46,8 @@ class TableStore {
             saveInLC: action,
             wasFired: action,
             setAttrValues: action,
-            setCollegs: action
+            setCoworkers: action,
+            coworkersById: computed
         })
 
     }
@@ -70,6 +72,10 @@ class TableStore {
         this.isLoading = true
         this.employeeList = []
         this.isLoading = false
+    }
+
+    clearCurrent() {
+        this.employee = undefined
     }
 
     addEmployee({data}) {
@@ -127,8 +133,8 @@ class TableStore {
         this.visibleModal = flag
     }
 
-    setVisibleCollegs(flag) {
-        this.visibleCollegsModal = flag
+    setVisibleCoworkers(flag) {
+        this.visibleCoworkersModal = flag
     }
 
     setVisibleAttrs(flag) {
@@ -139,14 +145,17 @@ class TableStore {
         this.actionName = actionName
         if (emp) {
             this.employee = emp
-            console.log('emp id:', emp.id)
         }
         switch (this.actionName) {
             case modalsTitles.attr:
                 this.setVisibleAttrs(true)
                 break
-            case modalsTitles.collegs:
-                this.setVisibleCollegs(true)
+            case modalsTitles.coworkers:
+                this.setVisibleCoworkers(true)
+                break
+            case modalsTitles.create:
+                this.clearCurrent()
+                this.setVisible(true)
                 break
             default:
                 this.setVisible(true)
@@ -164,7 +173,7 @@ class TableStore {
                 return 'Изменить данные работника'
             case modalsTitles.attr:
                 return 'Добавить атрибут'
-            case modalsTitles.collegs:
+            case modalsTitles.coworkers:
                 return 'Коллеги работника'
             default:
                 return 'Изменить данные'
@@ -192,6 +201,16 @@ class TableStore {
             .map(emp => this.calcShortName(emp))
     }
 
+    get coworkersById() {
+        if (!this.employee || !this.employee.coworkers) {
+            return false
+        }
+
+        return this.employee.coworkers.map(idx => {
+            return this.calcShortName(this.employeeList[idx])
+        })
+    }
+
     wasFired(emp) {
         const index = this.findIndex(emp)
         return this.employeeList[index].outDate
@@ -209,7 +228,7 @@ class TableStore {
         this.isLoading = true
         return promise(() => {
             console.log('new attrs:', newAttr)
-            console.log('old attr',this.employee.attributes)
+            console.log('old attr', this.employee.attributes)
 
             // this.employee.attributes.push(newAttr)
 
@@ -219,19 +238,16 @@ class TableStore {
         }, 700)
     }
 
-    setCollegs(collegs) {
+    setCoworkers(coworkers) {
         if (!this.employee) {
             return
         }
         this.isLoading = true
         return promise(() => {
-            console.log('new collegs:', collegs)
-            console.log('collegs ids:',this.employee.collegsIds)
-
-            // this.employee.collegs.push(collegs)
+            // this.employee.coworkers.push(coworkers)
 
             this.saveInLC()
-            this.setVisibleCollegs(false)
+            this.setVisibleCoworkers(false)
             this.isLoading = false
         }, 700)
     }

@@ -32,7 +32,7 @@ export const initialEmployees = [
         inDate: '01.02.2010',
         outDate: undefined,
         hasAccess: true,
-        collegsIds: [
+        coworkers: [
             2,
             3
         ],
@@ -53,7 +53,7 @@ export const initialEmployees = [
         inDate: '01.02.2008',
         outDate: '01.10.2018',
         hasAccess: true,
-        collegsIds: [],
+        coworkers: [],
         attributes: [
             {id: 0, name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Ford'},
             {id: 1, name: 'Количество детей', type: empAttrTypes.number, value: 1},
@@ -71,7 +71,7 @@ export const initialEmployees = [
         inDate: '01.02.2015',
         outDate: undefined,
         hasAccess: false,
-        collegsIds: [4],
+        coworkers: [4],
         attributes: [
             {id: 0, name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Toyota'},
             {id: 1, name: 'Количество детей', type: empAttrTypes.number, value: 0},
@@ -89,7 +89,7 @@ export const initialEmployees = [
         inDate: '01.08.2015',
         outDate: undefined,
         hasAccess: false,
-        collegsIds: [3],
+        collegs: [3],
         attributes: [
             {id: 0, name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Ford'},
             {id: 1, name: 'Количество детей', type: empAttrTypes.number, value: 0},
@@ -107,7 +107,7 @@ export const initialEmployees = [
         inDate: '01.08.2012',
         outDate: '01.08.2015',
         hasAccess: false,
-        collegsIds: [3],
+        coworkers: [3],
         attributes: []
     }
 ]

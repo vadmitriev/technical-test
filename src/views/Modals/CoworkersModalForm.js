@@ -1,27 +1,28 @@
 import {ModalStore} from '../../stores/ModalStore'
 import {observer} from 'mobx-react'
-import {dateFormat, genders, positionTypes} from '../../components/EmployeeTable/constant/constant'
-import {Button, Checkbox, DatePicker, Form, Input, message, Modal, Radio, Select} from 'antd'
+import {Button, Form, message, Modal, Select} from 'antd'
 import {action} from 'mobx'
 
-const modalStore = new ModalStore()
 
-const CollegasModalForm = observer(({store}) => {
+const CoworkersModalForm = observer(({store}) => {
+    const modalStore = new ModalStore(store.employee)
+
     const coworkers = store.coworkersShortNames.map(name => {
         return <Select.Option value={name}>{name}</Select.Option>
     })
-    console.log('collegas store:', store)
+
     return (
         <Modal
-            // form={form}
-            visible={store.visibleCollegsModal}
+            destroyOnClose={true}
+            visible={store.visibleCoworkersModal}
             title={store.modalTitle}
             okText="Сохранить"
             cancelText="Отмена"
+            onCancel={() => store.setVisibleCoworkers(false)}
             footer={[
                 <Button
                     key="cancel"
-                    onClick={() => store.setVisibleCollegs(false)}
+                    onClick={() => store.setVisibleCoworkers(false)}
                 >
                     Отмена
                 </Button>,
@@ -30,7 +31,7 @@ const CollegasModalForm = observer(({store}) => {
                     type="primary"
                     onClick={action(
                         async () => {
-                            store.setCollegs(modalStore)
+                            store.setCoworkers(modalStore)
                                 .then(message.info(`Коллеги были изменены`))
                         }
                     )}
@@ -40,7 +41,6 @@ const CollegasModalForm = observer(({store}) => {
             ]}
         >
             <Form
-                // form={form}
                 labelCol={{
                     span: 4,
                 }}
@@ -51,19 +51,22 @@ const CollegasModalForm = observer(({store}) => {
                 size="small"
             >
                 <Form.Item
-                    name="collegsIds"
+                    name="coworkers"
                     label="Коллеги"
                     style={{width: 1100}}
-                    onChange={(value) => modalStore.selectChangeHandler(value, "collegsIds")}
+                    onChange={(value) => modalStore.selectChangeHandler(value, "coworkers")}
                 >
                     <Select
                         mode="multiple"
                         style={{width: 200}}
                         placeholder="Выберите коллег"
-                        // onChange={handleChange}
                         optionLabelProp="label"
                         allowClear="true"
-                        onChange={(value) => modalStore.selectChangeHandler(value, "collegsIds")}
+                        defaultValue={modalStore.employee
+                            ? action(() => modalStore.employee.coworkersById)
+                            : ''
+                        }
+                        onChange={(value) => modalStore.selectChangeHandler(value, "coworkers")}
                     >
                         {coworkers}
                     </Select>
@@ -74,4 +77,4 @@ const CollegasModalForm = observer(({store}) => {
 })
 
 
-export default CollegasModalForm
+export default CoworkersModalForm

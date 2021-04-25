@@ -1,14 +1,14 @@
 import {ModalStore} from '../../stores/ModalStore'
 import {observer} from 'mobx-react'
-import {empAttrTypes, genders, positionTypes} from '../../components/EmployeeTable/constant/constant'
-import {Button, Form, Input, message, Modal, Radio, Select} from 'antd'
+import {empAttrTypes} from '../../components/EmployeeTable/constant/constant'
+import {Button, Form, Input, message, Modal, Select} from 'antd'
 import {action} from 'mobx'
 import React from 'react'
 
-const modalStore = new ModalStore()
 
 const AttributesEditModalForm = observer(({store}) => {
-    console.log('attr store:', store)
+    const modalStore = new ModalStore()
+    // console.log('attr store:', store)
 
     const attrTypes = Object.values(empAttrTypes).map(pos => {
         return <Select.Option value={pos} key={pos}>{pos}</Select.Option>
@@ -16,7 +16,7 @@ const AttributesEditModalForm = observer(({store}) => {
 
     return (
         <Modal
-            // form={form}
+            destroyOnClose={true}
             visible={store.visibleAttrModal}
             title={store.modalTitle}
             okText="Сохранить"
@@ -51,7 +51,6 @@ const AttributesEditModalForm = observer(({store}) => {
             ]}
         >
             <Form
-                // form={form}
                 labelCol={{
                     span: 4,
                 }}
@@ -76,19 +75,19 @@ const AttributesEditModalForm = observer(({store}) => {
                     />
                 </Form.Item>
                 <Form.Item
-                        name="empAttrTypes"
-                        label="Тип атрибута"
-                        style={{width: 1100}}
-                        rules={[{required: true, message: 'Необходимо указать тип атрибута'}]}
-                        onChange={(value) => modalStore.selectChangeHandler(value, "attributes:")}
-                    >
+                    name="empAttrTypes"
+                    label="Тип атрибута"
+                    style={{width: 1100}}
+                    rules={[{required: true, message: 'Необходимо указать тип атрибута'}]}
+                    onChange={(value) => modalStore.selectChangeHandler(value, "attributes:")}
+                >
                     <Select
                         style={{width: 200}}
                         placeholder="Выберите тип атрибута"
                         // onChange={handleChange}
                         optionLabelProp="label"
                         allowClear="true"
-                        onChange={(value) => modalStore.selectChangeHandler(value, "collegsIds")}
+                        onChange={(value) => modalStore.selectChangeHandler(value, "coworkers")}
                     >
                         {attrTypes}
                     </Select>

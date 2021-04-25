@@ -38,7 +38,7 @@ export const defaultEmp = {
     inDate: '01.05.1900',
     outDate: '',
     hasAccess: false,
-    collegsIds: [],
+    coworkers: [],
     attributes: []
 }
 
@@ -46,5 +46,5 @@ export const modalsTitles = {
     edit: 'edit',
     create: 'create',
     attr: 'attr',
-    collegs: 'collegs'
+    coworkers: 'coworkers'
 }

@@ -62,7 +62,6 @@ export const TableHeaderColumns = (store) => {
             dataIndex: "outDate",
             key: "outDate",
             width: 160,
-            sorter: (a, b) => a.outDate.localeCompare(b.outDate),
             render: (_, employee) => {
                 const outDate = store.wasFired(employee)
                 if (outDate) {
@@ -94,7 +93,7 @@ export const TableHeaderColumns = (store) => {
         },
         {
             title: "Коллеги",
-            dataIndex: "collegsIds",
+            dataIndex: "coworkers",
             width: 150,
             render: (_, employee) => {
                 return (
@@ -103,9 +102,9 @@ export const TableHeaderColumns = (store) => {
                             <Button
                                 shape="round"
                                 size="small"
-                                icon={<UnorderedListOutlined />}
+                                icon={<UnorderedListOutlined/>}
                                 onClick={action(() =>
-                                    store.showModal(modalsTitles.collegs, employee)
+                                    store.showModal(modalsTitles.coworkers, employee)
                                 )}
                             >
                             </Button>
