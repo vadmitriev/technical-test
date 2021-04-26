@@ -1,11 +1,10 @@
-import {ModalStore} from '../../stores/ModalStore'
 import {observer} from 'mobx-react'
+import {ModalStore} from '../../../stores/ModalStore'
 import {Button, Form, message, Modal, Select} from 'antd'
 import {action} from 'mobx'
 
-
-const CoworkersModalForm = observer(({store}) => {
-    const modalStore = new ModalStore(store.employee)
+export const CoworkersModal = observer(({store}) => {
+     const modalStore = new ModalStore(store.employee)
 
     const coworkers = store.coworkersShortNames.map(name => {
         return <Select.Option value={name}>{name}</Select.Option>
@@ -14,15 +13,15 @@ const CoworkersModalForm = observer(({store}) => {
     return (
         <Modal
             destroyOnClose={true}
-            visible={store.visibleCoworkersModal}
+            visible={store.visibleModal}
             title={store.modalTitle}
             okText="Сохранить"
             cancelText="Отмена"
-            onCancel={() => store.setVisibleCoworkers(false)}
+            onCancel={() => store.setVisible(false)}
             footer={[
                 <Button
                     key="cancel"
-                    onClick={() => store.setVisibleCoworkers(false)}
+                    onClick={() => store.setVisible(false)}
                 >
                     Отмена
                 </Button>,
@@ -76,5 +75,4 @@ const CoworkersModalForm = observer(({store}) => {
     )
 })
 
-
-export default CoworkersModalForm
+export default CoworkersModal

@@ -1,28 +1,26 @@
-import {ModalStore} from '../../stores/ModalStore'
+import {ModalStore} from '../../../stores/ModalStore'
 import {observer} from 'mobx-react'
-import {empAttrTypes} from '../../components/EmployeeTable/constant/constant'
+import {ATTR_FIELDS, EMP_ATTR_TYPES} from '../constant/constant'
 import {Button, Form, Input, message, Modal, Select} from 'antd'
 import {action} from 'mobx'
 import React from 'react'
 
+const AttributesModal = observer(({store}) => {
+    const modalStore = new ModalStore(store.employee)
 
-const AttributesEditModalForm = observer(({store}) => {
-    const modalStore = new ModalStore()
-    // console.log('attr store:', store)
-
-    const attrTypes = Object.values(empAttrTypes).map(pos => {
+    const attrTypes = Object.values(EMP_ATTR_TYPES).map(pos => {
         return <Select.Option value={pos} key={pos}>{pos}</Select.Option>
     })
 
     return (
         <Modal
             destroyOnClose={true}
-            visible={store.visibleAttrModal}
+            visible={store.visibleModal}
             title={store.modalTitle}
             okText="Сохранить"
             cancelText="Отмена"
             onCancel={() => {
-                store.setVisibleAttrs(false)
+                store.setVisible(false)
             }}
             onOk={() => {
                 // modalStore.clear()
@@ -31,7 +29,7 @@ const AttributesEditModalForm = observer(({store}) => {
             footer={[
                 <Button
                     key="cancel"
-                    onClick={() => store.setVisibleAttrs(false)}
+                    onClick={() => store.setVisible(false)}
                 >
                     Отмена
                 </Button>,
@@ -61,46 +59,44 @@ const AttributesEditModalForm = observer(({store}) => {
                 size="small"
             >
                 <Form.Item
-                    name="attrName"
                     label="Название атрибута"
                     style={{width: 1100}}
                     rules={[{required: true, message: 'Необходимо указать название атрибута'}]}
-                    onChange={(value) => modalStore.selectChangeHandler(value, "attributes:attrName")}
+                    // onChange={(value) => modalStore.changeHandler(value, ATTR_FIELDS.name)}
                 >
                     <Input
-                        name="attrName"
+                        name={ATTR_FIELDS.name}
                         placeholder="Название атрибута"
                         style={{width: 200}}
                         onChange={(e) => modalStore.changeHandler(e)}
                     />
                 </Form.Item>
                 <Form.Item
-                    name="empAttrTypes"
+                    name={ATTR_FIELDS.type}
                     label="Тип атрибута"
                     style={{width: 1100}}
-                    rules={[{required: true, message: 'Необходимо указать тип атрибута'}]}
-                    onChange={(value) => modalStore.selectChangeHandler(value, "attributes:")}
+                    // rules={[{required: true, message: 'Необходимо указать тип атрибута'}]}
+                    onChange={(value) => modalStore.selectChangeHandler(value, ATTR_FIELDS.type)}
                 >
                     <Select
+                        name={ATTR_FIELDS.type}
                         style={{width: 200}}
                         placeholder="Выберите тип атрибута"
                         // onChange={handleChange}
                         optionLabelProp="label"
                         allowClear="true"
-                        onChange={(value) => modalStore.selectChangeHandler(value, "coworkers")}
+                        onChange={(value, event) => modalStore.selectChangeHandler(value, event, ATTR_FIELDS.type)}
                     >
                         {attrTypes}
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    name="attrValue"
                     label="Значение атрибута"
                     style={{width: 1100}}
                     rules={[{required: true, message: 'Необходимо указать значение атрибута'}]}
-                    onChange={(value) => modalStore.changeHandler(value, "attributes:attrName")}
                 >
                     <Input
-                        name="attrValue"
+                        name={ATTR_FIELDS.value}
                         placeholder="Значение атрибута"
                         style={{width: 200}}
                         onChange={(e) => modalStore.changeHandler(e)}
@@ -111,5 +107,4 @@ const AttributesEditModalForm = observer(({store}) => {
     )
 })
 
-
-export default AttributesEditModalForm
+export default AttributesModal

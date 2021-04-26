@@ -18,7 +18,7 @@
 */
 
 
-import {empAttrTypes, positionTypes, genders} from './constant'
+import {EMP_ATTR_TYPES, POSITION_TYPES, GENDERS} from './constant'
 
 export const initialEmployees = [
     {
@@ -26,9 +26,9 @@ export const initialEmployees = [
         surname: 'Афанасьев',
         name: 'Андрей',
         fatherName: 'Андреевич',
-        position: positionTypes.director,
+        position: POSITION_TYPES.director,
         birthday: '01.05.1980',
-        gender: genders.male,
+        gender: GENDERS.male,
         inDate: '01.02.2010',
         outDate: undefined,
         hasAccess: true,
@@ -37,9 +37,9 @@ export const initialEmployees = [
             3
         ],
         attributes: [
-            {id: 0, name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Lexus'},
-            {id: 1, name: 'Количество детей', type: empAttrTypes.number, value: 2},
-            {id: 2, name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.06.2021'},
+            {id: 0, name: 'Марка автомобиля', type: EMP_ATTR_TYPES.string, value: 'Lexus'},
+            {id: 1, name: 'Количество детей', type: EMP_ATTR_TYPES.number, value: 2},
+            {id: 2, name: 'Следующий отпуск', type: EMP_ATTR_TYPES.date, value: '01.06.2021'},
         ]
     },
     {
@@ -47,17 +47,17 @@ export const initialEmployees = [
         surname: 'Беглов',
         name: 'Борис',
         fatherName: 'Борисович',
-        position: positionTypes.counter,
+        position: POSITION_TYPES.counter,
         birthday: '01.05.1990',
-        gender: genders.male,
+        gender: GENDERS.male,
         inDate: '01.02.2008',
         outDate: '01.10.2018',
         hasAccess: true,
         coworkers: [],
         attributes: [
-            {id: 0, name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Ford'},
-            {id: 1, name: 'Количество детей', type: empAttrTypes.number, value: 1},
-            {id: 2, name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.07.2021'},
+            {id: 0, name: 'Марка автомобиля', type: EMP_ATTR_TYPES.string, value: 'Ford'},
+            {id: 1, name: 'Количество детей', type: EMP_ATTR_TYPES.number, value: 1},
+            {id: 2, name: 'Следующий отпуск', type: EMP_ATTR_TYPES.date, value: '01.07.2021'},
         ]
     },
     {
@@ -65,17 +65,17 @@ export const initialEmployees = [
         surname: 'Васильева',
         name: 'Виктория',
         fatherName: 'Васильевна',
-        position: positionTypes.hr,
+        position: POSITION_TYPES.hr,
         birthday: '01.05.1995',
-        gender: genders.female,
+        gender: GENDERS.female,
         inDate: '01.02.2015',
         outDate: undefined,
         hasAccess: false,
         coworkers: [4],
         attributes: [
-            {id: 0, name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Toyota'},
-            {id: 1, name: 'Количество детей', type: empAttrTypes.number, value: 0},
-            {id: 2, name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.07.2021'},
+            {id: 0, name: 'Марка автомобиля', type: EMP_ATTR_TYPES.string, value: 'Toyota'},
+            {id: 1, name: 'Количество детей', type: EMP_ATTR_TYPES.number, value: 0},
+            {id: 2, name: 'Следующий отпуск', type: EMP_ATTR_TYPES.date, value: '01.07.2021'},
         ]
     },
     {
@@ -83,17 +83,17 @@ export const initialEmployees = [
         surname: 'Гринев',
         name: 'Геннадий',
         fatherName: 'Геннадьевич',
-        position: positionTypes.developer,
+        position: POSITION_TYPES.developer,
         birthday: '01.05.1993',
-        gender: genders.male,
+        gender: GENDERS.male,
         inDate: '01.08.2015',
         outDate: undefined,
         hasAccess: false,
         collegs: [3],
         attributes: [
-            {id: 0, name: 'Марка автомобиля', type: empAttrTypes.string, value: 'Ford'},
-            {id: 1, name: 'Количество детей', type: empAttrTypes.number, value: 0},
-            {id: 2, name: 'Следующий отпуск', type: empAttrTypes.date, value: '01.08.2021'},
+            {id: 0, name: 'Марка автомобиля', type: EMP_ATTR_TYPES.string, value: 'Ford'},
+            {id: 1, name: 'Количество детей', type: EMP_ATTR_TYPES.number, value: 0},
+            {id: 2, name: 'Следующий отпуск', type: EMP_ATTR_TYPES.date, value: '01.08.2021'},
         ]
     },
     {
@@ -101,9 +101,9 @@ export const initialEmployees = [
         surname: 'Данилко',
         name: 'Даниил',
         fatherName: 'Денисович',
-        position: positionTypes.cleaner,
+        position: POSITION_TYPES.cleaner,
         birthday: '01.05.1983',
-        gender: genders.male,
+        gender: GENDERS.male,
         inDate: '01.08.2012',
         outDate: '01.08.2015',
         hasAccess: false,

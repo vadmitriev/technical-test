@@ -1,9 +1,9 @@
 import {action, computed, makeObservable, observable, runInAction} from 'mobx'
-import {promise} from '../util'
+import {promise} from '../utils/util'
 import {initialEmployees} from '../components/EmployeeTable/constant/initialData'
-import {modalsTitles} from '../components/EmployeeTable/constant/constant'
+import {ATTR_FIELDS, DEFAULT_EMP, MODALS_TITLES, REQUIRED_FIELDS} from '../components/EmployeeTable/constant/constant'
 
-const listNameInLC = 'store'
+const listNameInLS = 'store'
 
 class TableStore {
     isLoading = false
@@ -22,8 +22,6 @@ class TableStore {
             appLoaded: observable,
             token: observable,
             visibleModal: observable,
-            visibleAttrModal: observable,
-            visibleCoworkersModal: observable,
             employeeList: observable,
             employee: observable,
             actionName: observable,
@@ -32,8 +30,6 @@ class TableStore {
             clearCurrent: action,
             deleteEmployee: action,
             setVisible: action,
-            setVisibleCoworkers: action,
-            setVisibleAttrs: action,
             showModal: action,
             addEmployee: action,
             editEmployee: action,
@@ -43,7 +39,7 @@ class TableStore {
             coworkersShortNames: computed,
             hasAccess: action,
             setError: action,
-            saveInLC: action,
+            saveInLS: action,
             wasFired: action,
             setAttrValues: action,
             setCoworkers: action,
@@ -60,9 +56,9 @@ class TableStore {
         this.isLoading = true
         this.setVisible(false)
         setTimeout(() => {
-            const stateInLC = localStorage.getItem(listNameInLC)
-            this.employeeList = JSON.parse(stateInLC) ?? initialEmployees
-            this.saveInLC()
+            const stateInLS = localStorage.getItem(listNameInLS)
+            this.employeeList = JSON.parse(stateInLS) ?? initialEmployees
+            this.saveInLS()
             this.isLoading = false
         }, 500)
         this.appLoaded = true
@@ -85,7 +81,7 @@ class TableStore {
 
             this.employee = data
             this.employeeList.push(data)
-            this.saveInLC()
+            this.saveInLS()
             this.isLoading = false
         }, 500)
     }
@@ -94,17 +90,42 @@ class TableStore {
         runInAction(() => {
             this.employeeList[emp.id] = emp.data
         })
-        this.saveInLC()
+        this.saveInLS()
     }
 
     setValues(emp) {
         console.log('setValues:', {emp})
+        const data = {...emp}
+        const errors = Object.keys(emp).filter(key => {
+            console.log('key:', key)
+            console.log('data value:', data[key])
+            console.log('default value:', DEFAULT_EMP[key])
+
+            const dataKey = data[key]
+            const defKey = DEFAULT_EMP[key]
+            const compare = dataKey === defKey
+
+            debugger
+            return data[key] === DEFAULT_EMP[key] && REQUIRED_FIELDS.includes(key);
+
+            // console.log('key:', key, 'includes?', REQUIRED_FIELDS.includes(key))
+            // if ({...emp}[key] === DEFAULT_EMP[key] && REQUIRED_FIELDS.includes(key)) {
+            //     return key
+            // } else {
+            //     console.log('emp key:', emp[key], 'default key:', DEFAULT_EMP[key])
+            // }
+        })
+        console.log('errors:', errors)
+
+        if (errors.length) {
+            return Promise.reject(DEFAULT_EMP[errors[0]])
+        }
+
         this.setVisible(false)
 
         return promise(() => ({data: {...emp}}), 500)
             .then(action(data => {
-                console.log('emp aaa:', emp)
-                console.log('data:', data)
+                console.log('data here:', data)
                 if (this.actionName === 'create') {
                     data.id = this.employeeList.length
                     this.addEmployee(data)
@@ -115,7 +136,7 @@ class TableStore {
             }))
             .catch(action(err => this.setError(err)))
             .finally(action(() => {
-                this.saveInLC()
+                this.saveInLS()
                 this.isLoading = false
             }))
     }
@@ -124,7 +145,7 @@ class TableStore {
         this.isLoading = true
         return promise(() => {
             this.employeeList = this.employeeList.filter(emp => emp.id !== id)
-            this.saveInLC()
+            this.saveInLS()
             this.isLoading = false
         }, 700)
     }
@@ -133,27 +154,13 @@ class TableStore {
         this.visibleModal = flag
     }
 
-    setVisibleCoworkers(flag) {
-        this.visibleCoworkersModal = flag
-    }
-
-    setVisibleAttrs(flag) {
-        this.visibleAttrModal = flag
-    }
-
-    showModal(actionName, emp) {
+    showModal({actionName}, emp) {
         this.actionName = actionName
         if (emp) {
             this.employee = emp
         }
         switch (this.actionName) {
-            case modalsTitles.attr:
-                this.setVisibleAttrs(true)
-                break
-            case modalsTitles.coworkers:
-                this.setVisibleCoworkers(true)
-                break
-            case modalsTitles.create:
+            case MODALS_TITLES.create.actionName:
                 this.clearCurrent()
                 this.setVisible(true)
                 break
@@ -166,18 +173,7 @@ class TableStore {
         if (!this.actionName) {
             return 'Редактировать данные'
         }
-        switch (this.actionName) {
-            case modalsTitles.create:
-                return 'Добавить работника'
-            case modalsTitles.edit:
-                return 'Изменить данные работника'
-            case modalsTitles.attr:
-                return 'Добавить атрибут'
-            case modalsTitles.coworkers:
-                return 'Коллеги работника'
-            default:
-                return 'Изменить данные'
-        }
+        return MODALS_TITLES[this.actionName].title
     }
 
     calcShortName(emp) {
@@ -205,6 +201,9 @@ class TableStore {
         if (!this.employee || !this.employee.coworkers) {
             return false
         }
+        if (!this.employee.coworkers.length) {
+            return false
+        }
 
         return this.employee.coworkers.map(idx => {
             return this.calcShortName(this.employeeList[idx])
@@ -226,14 +225,18 @@ class TableStore {
             return
         }
         this.isLoading = true
+
         return promise(() => {
-            console.log('new attrs:', newAttr)
-            console.log('old attr', this.employee.attributes)
+            const attrs = ATTR_FIELDS
+            attrs.id = this.employee.attributes.length
+            attrs.name= {...newAttr}[ATTR_FIELDS.name]
+            attrs.type= {...newAttr}[ATTR_FIELDS.type]
+            attrs.value= {...newAttr}[ATTR_FIELDS.value]
 
-            // this.employee.attributes.push(newAttr)
+            this.employee.attributes.push(attrs)
 
-            this.setVisibleAttrs(false)
-            this.saveInLC()
+            this.setVisible(false)
+            this.saveInLS()
             this.isLoading = false
         }, 700)
     }
@@ -246,8 +249,8 @@ class TableStore {
         return promise(() => {
             // this.employee.coworkers.push(coworkers)
 
-            this.saveInLC()
-            this.setVisibleCoworkers(false)
+            this.saveInLS()
+            this.setVisible(false)
             this.isLoading = false
         }, 700)
     }
@@ -257,8 +260,8 @@ class TableStore {
         alert(message)
     }
 
-    saveInLC() {
-        localStorage.setItem(listNameInLC, JSON.stringify(this.employeeList))
+    saveInLS() {
+        localStorage.setItem(listNameInLS, JSON.stringify(this.employeeList))
     }
 }
 

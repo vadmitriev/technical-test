@@ -10,28 +10,25 @@ import {
 import {SyncOutlined} from '@ant-design/icons'
 import 'antd/dist/antd.css'
 import '../styles/TableEmployyes.css'
-import EmployeeModalForm from './Modals/EmpoyeeModalForm'
+import ModalForm from './ModalForm'
 
 import {TableHeaderColumns} from '../components/EmployeeTable/TableHeaderColumn'
 import {expandedRowRender} from '../components/EmployeeTable/ExtenderTableRow'
 import {AddEmployeeButton} from '../components/EmployeeTable/AddEmployeeButton'
-import CoworkersModalForm from './Modals/CoworkersModalForm'
-import AttributesEditModalForm from './Modals/AttributesEditModalForm'
 
-const loadingIcon = <SyncOutlined style={{fontSize: 32}} spin/>
 
 export const TableEmployees = observer(class extends Component {
     render() {
         const {store} = this.props
+
+        const loadingIcon = <SyncOutlined style={{fontSize: 32}} spin/>
 
         const columns = TableHeaderColumns(store)
 
         return (
             <Space direction="vertical" style={{padding: 20}}>
                 <AddEmployeeButton store={store}/>
-                <EmployeeModalForm store={store}/>
-                <CoworkersModalForm store={store}/>
-                <AttributesEditModalForm store={store}/>
+                <ModalForm store={store}/>
                 <Row type="flex" className="flex-item-grow">
                     <Col span={24}>
                         <Spin

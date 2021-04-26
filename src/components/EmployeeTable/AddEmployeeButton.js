@@ -3,7 +3,7 @@ import {observer} from 'mobx-react'
 import {Button, Col, Row} from 'antd'
 import {PlusOutlined} from '@ant-design/icons'
 import {action} from 'mobx'
-import {modalsTitles} from './constant/constant'
+import {MODALS_TITLES} from './constant/constant'
 
 export const AddEmployeeButton = observer(class extends Component {
     render() {
@@ -17,7 +17,7 @@ export const AddEmployeeButton = observer(class extends Component {
                         shape="round"
                         icon={<PlusOutlined/>}
                         onClick={action(() => {
-                                store.showModal(modalsTitles.create)
+                                store.showModal(MODALS_TITLES.create)
                             })
                         }
                     >

@@ -1,9 +1,20 @@
-import {sorterFields} from '../../util'
-import {Button, Popconfirm, Space, Tag, message, Tooltip} from 'antd'
-import {CloseOutlined, EditOutlined, PlusSquareOutlined, UnorderedListOutlined} from '@ant-design/icons'
+import {sorterFields} from '../../utils/util'
+import {
+    Button,
+    Popconfirm,
+    Space,
+    Tag,
+    message,
+    Tooltip
+} from 'antd'
+import {
+    CloseOutlined,
+    EditOutlined,
+    PlusSquareOutlined,
+    UnorderedListOutlined
+} from '@ant-design/icons'
 import {action} from 'mobx'
-import {modalsTitles} from './constant/constant'
-
+import {MODALS_TITLES} from './constant/constant'
 
 export const TableHeaderColumns = (store) => {
     return [
@@ -104,7 +115,7 @@ export const TableHeaderColumns = (store) => {
                                 size="small"
                                 icon={<UnorderedListOutlined/>}
                                 onClick={action(() =>
-                                    store.showModal(modalsTitles.coworkers, employee)
+                                    store.showModal(MODALS_TITLES.coworkers, employee)
                                 )}
                             >
                             </Button>
@@ -126,7 +137,7 @@ export const TableHeaderColumns = (store) => {
                                 size="small"
                                 icon={<EditOutlined/>}
                                 onClick={action(() =>
-                                    store.showModal(modalsTitles.edit, employee)
+                                    store.showModal(MODALS_TITLES.edit, employee)
                                 )}
                             >
                             </Button>
@@ -137,7 +148,7 @@ export const TableHeaderColumns = (store) => {
                                 size="small"
                                 icon={<PlusSquareOutlined/>}
                                 onClick={action(() =>
-                                    store.showModal(modalsTitles.attr, employee)
+                                    store.showModal(MODALS_TITLES.attr, employee)
                                 )}
                             >
                             </Button>

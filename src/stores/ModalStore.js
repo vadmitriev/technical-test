@@ -1,5 +1,5 @@
 import {action, computed, makeObservable, observable} from 'mobx'
-import {defaultEmp} from '../components/EmployeeTable/constant/constant'
+import {DEFAULT_EMP} from '../components/EmployeeTable/constant/constant'
 
 export class ModalStore {
     isLoading = false
@@ -22,7 +22,8 @@ export class ModalStore {
 
         console.log('emp:', emp)
 
-        this.currentEmp = emp ? emp : defaultEmp
+        this.currentEmp = emp ? emp : DEFAULT_EMP
+        // this.currentEmp = emp ?? emp
     }
 
     changeHandler(event) {
@@ -32,7 +33,10 @@ export class ModalStore {
 
         const key = event.target.name
         this.currentEmp[key] = event.target.value
+    }
 
+    selectChangeHandler(value, event, key) {
+        this.currentEmp[key] = value
     }
 
     dateChangeHandler(date, dateString, key) {
@@ -47,12 +51,8 @@ export class ModalStore {
         this.currentEmp[key] = value.target.checked
     }
 
-    selectChangeHandler(value, event, key) {
-        this.currentEmp[key] = value
-    }
-
     clear() {
-        this.currentEmp = defaultEmp
+        this.currentEmp = DEFAULT_EMP
     }
 
     get employee() {
