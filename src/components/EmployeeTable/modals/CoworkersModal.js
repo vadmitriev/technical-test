@@ -58,10 +58,12 @@ export const CoworkersModal = observer(({store}) => {
                         placeholder="Выберите коллег"
                         optionLabelProp="label"
                         allowClear="true"
-                        defaultValue={store.employee
+                        defaultValue={store.employee && store.employee.coworkers
                             ? store.coworkersById
-                            : ''}
-                        onChange={(value, event) => modalStore.selectChangeHandler(value, event, "coworkers")}
+                            : undefined}
+                        onChange={(value, event) => {
+                            modalStore.selectChangeHandler(value, event, "coworkers")
+                        }}
                     >
                         {coworkers}
                     </Select>

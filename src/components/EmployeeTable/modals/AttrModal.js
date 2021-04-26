@@ -22,7 +22,6 @@ const AttributesModal = observer(({store}) => {
                 store.setVisible(false)
             }}
             onOk={() => {
-                // modalStore.clear()
                 console.log('ok pressed')
             }}
             footer={[
@@ -39,7 +38,14 @@ const AttributesModal = observer(({store}) => {
                     onClick={
                         async () => {
                             store.setAttrValues(modalStore.employee)
-                                .then(message.info(`Атрибут был добавлен`))
+                                .catch((err) => {
+                                    if (err) {
+                                        message.warn(err)
+                                    } else {
+                                        message.info(`Атрибут был добавлен`)
+                                    }
+
+                                })
                         }
                     }
                 >

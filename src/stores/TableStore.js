@@ -87,6 +87,7 @@ class TableStore {
             data.id = this.employeeList.length
 
             this.employee = data
+            this.employee.attributes = []
             this.employeeList.push(data)
 
             this.saveInLS()
@@ -211,8 +212,13 @@ class TableStore {
     }
 
     setAttrValues(newAttr) {
-        if (!this.employee || !this.employee.attributes) {
-            return
+        if (!this.employee) {
+            return Promise.reject('Произошла ошибка.')
+        }
+        if (!this.employee.attributes ||
+            !Array.isArray(this.employee.attributes)
+        ) {
+            this.employee.attributes = []
         }
         this.isLoading = true
 
