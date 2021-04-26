@@ -6,7 +6,7 @@ export class ModalStore {
     currentEmp = undefined
     isFormValid = false
 
-    constructor(emp) {
+    constructor(emp = {}) {
         makeObservable(this, {
             currentEmp: observable,
             changeHandler: action,
@@ -17,26 +17,24 @@ export class ModalStore {
             employee: computed,
             isChecked: action,
             isFormValid: observable,
-            confirmForm: action
+            confirmForm: computed,
         })
 
-        console.log('emp:', emp)
-
-        this.currentEmp = emp ? emp : DEFAULT_EMP
-        // this.currentEmp = emp ?? emp
+        this.currentEmp = emp ? emp : {}
     }
 
     changeHandler(event) {
         if (!event) {
             return
         }
-
         const key = event.target.name
         this.currentEmp[key] = event.target.value
     }
 
     selectChangeHandler(value, event, key) {
-        console.log('select value:', value, '; event: ', event, ' ; key: ', key)
+        if (!value && event.target.value) {
+            value = event.target.value
+        }
         this.currentEmp[key] = value
     }
 
@@ -48,8 +46,8 @@ export class ModalStore {
         return this.currentEmp[key]
     }
 
-    checkBoxChangeHandler(value, key) {
-        this.currentEmp[key] = value.target.checked
+    checkBoxChangeHandler(checked, key) {
+        this.currentEmp[key] = checked
     }
 
     clear() {
@@ -60,8 +58,8 @@ export class ModalStore {
         return this.currentEmp
     }
 
-    confirmForm() {
-        console.log('confirmForm')
+    get confirmForm() {
+        return this.isFormValid
     }
 }
 

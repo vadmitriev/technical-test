@@ -25,27 +25,33 @@ export const GENDERS = {
     female: 'Женщина'
 }
 
-export const REQUIRED_FIELDS = [
-    'surname',
-    'name',
-    'birthday',
-    'gender',
-    'inDate'
-]
-
 export const DEFAULT_EMP = {
     id: 0,
-    surname: 'фамилия',
+    surname: 'surname',
+    name: 'name',
+    fatherName: 'fatherName',
+    position: 'position',
+    birthday: 'birthday',
+    gender: 'gender',
+    inDate: 'inDate',
+    outDate: 'outDate',
+    hasAccess: 'hasAccess',
+    coworkers: 'coworkers',
+    attributes: 'attributes'
+}
+
+export const RUS_FIELDS = {
+    surname: 'Фамилия',
     name: 'Имя',
     fatherName: 'Отчество',
     position: 'Должность',
-    birthday: 'Дата рождения',
+    birthday: 'День рождения',
     gender: 'Пол',
     inDate: 'Дата приема',
-    outDate: '',
-    hasAccess: false,
-    coworkers: [],
-    attributes: []
+    outDate: 'дата увольнения',
+    hasAccess: 'Права доступа',
+    coworkers: 'Коллеги',
+    attributes: 'Атрибуты'
 }
 
 export const MODALS_TITLES = {

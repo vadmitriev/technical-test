@@ -1,9 +1,16 @@
 import {action, computed, makeObservable, observable, runInAction} from 'mobx'
 import {promise} from '../utils/util'
 import {initialEmployees} from '../components/EmployeeTable/constant/initialData'
-import {ATTR_FIELDS, DEFAULT_EMP, MODALS_TITLES, REQUIRED_FIELDS} from '../components/EmployeeTable/constant/constant'
+import {ATTR_FIELDS, DEFAULT_EMP, MODALS_TITLES, RUS_FIELDS} from '../components/EmployeeTable/constant/constant'
 
 const listNameInLS = 'store'
+const requiredFields = [
+    DEFAULT_EMP.surname,
+    DEFAULT_EMP.name,
+    DEFAULT_EMP.birthday,
+    DEFAULT_EMP.gender,
+    DEFAULT_EMP.inDate
+]
 
 class TableStore {
     isLoading = false
@@ -81,6 +88,7 @@ class TableStore {
 
             this.employee = data
             this.employeeList.push(data)
+
             this.saveInLS()
             this.isLoading = false
         }, 500)
@@ -94,39 +102,22 @@ class TableStore {
     }
 
     setValues(emp) {
-        console.log('setValues:', {emp})
-        const data = {...emp}
-        const errors = Object.keys(emp).filter(key => {
-            console.log('key:', key)
-            console.log('data value:', data[key])
-            console.log('default value:', DEFAULT_EMP[key])
-
-            const dataKey = data[key]
-            const defKey = DEFAULT_EMP[key]
-            const compare = dataKey === defKey
-
-            debugger
-            return data[key] === DEFAULT_EMP[key] && REQUIRED_FIELDS.includes(key);
-
-            // console.log('key:', key, 'includes?', REQUIRED_FIELDS.includes(key))
-            // if ({...emp}[key] === DEFAULT_EMP[key] && REQUIRED_FIELDS.includes(key)) {
-            //     return key
-            // } else {
-            //     console.log('emp key:', emp[key], 'default key:', DEFAULT_EMP[key])
-            // }
+        const errors = []
+        requiredFields.forEach(key => {
+            if (!Object.keys({...emp}).includes(key)) {
+                errors.push(`Поле ${RUS_FIELDS[key]} не заполнено!`)
+            }
         })
-        console.log('errors:', errors)
 
         if (errors.length) {
-            return Promise.reject(DEFAULT_EMP[errors[0]])
+            return Promise.reject(errors[0])
         }
 
         this.setVisible(false)
 
         return promise(() => ({data: {...emp}}), 500)
             .then(action(data => {
-                console.log('data here:', data)
-                if (this.actionName === 'create') {
+                if (this.actionName === MODALS_TITLES.create.actionName) {
                     data.id = this.employeeList.length
                     this.addEmployee(data)
                 } else {
@@ -159,14 +150,10 @@ class TableStore {
         if (emp) {
             this.employee = emp
         }
-        switch (this.actionName) {
-            case MODALS_TITLES.create.actionName:
-                this.clearCurrent()
-                this.setVisible(true)
-                break
-            default:
-                this.setVisible(true)
+        if (this.actionName === MODALS_TITLES.create.actionName) {
+            this.clearCurrent()
         }
+        this.setVisible(true)
     }
 
     get modalTitle() {
@@ -198,7 +185,10 @@ class TableStore {
     }
 
     get coworkersById() {
-        if (!this.employee || !this.employee.coworkers) {
+        if (!this.employee
+            || !this.employee.coworkers
+            || !Array.isArray(this.employee.coworkers)
+        ) {
             return false
         }
         if (!this.employee.coworkers.length) {
@@ -221,21 +211,22 @@ class TableStore {
     }
 
     setAttrValues(newAttr) {
-        if (!this.employee) {
+        if (!this.employee || !this.employee.attributes) {
             return
         }
         this.isLoading = true
 
         return promise(() => {
+            this.setVisible(false)
+
             const attrs = ATTR_FIELDS
             attrs.id = this.employee.attributes.length
-            attrs.name= {...newAttr}[ATTR_FIELDS.name]
-            attrs.type= {...newAttr}[ATTR_FIELDS.type]
-            attrs.value= {...newAttr}[ATTR_FIELDS.value]
+            attrs.name = {...newAttr}[ATTR_FIELDS.name]
+            attrs.type = {...newAttr}[ATTR_FIELDS.type]
+            attrs.value = {...newAttr}[ATTR_FIELDS.value]
 
             this.employee.attributes.push(attrs)
 
-            this.setVisible(false)
             this.saveInLS()
             this.isLoading = false
         }, 700)

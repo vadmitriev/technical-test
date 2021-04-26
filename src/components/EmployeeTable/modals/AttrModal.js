@@ -2,7 +2,6 @@ import {ModalStore} from '../../../stores/ModalStore'
 import {observer} from 'mobx-react'
 import {ATTR_FIELDS, EMP_ATTR_TYPES} from '../constant/constant'
 import {Button, Form, Input, message, Modal, Select} from 'antd'
-import {action} from 'mobx'
 import React from 'react'
 
 const AttributesModal = observer(({store}) => {
@@ -37,24 +36,20 @@ const AttributesModal = observer(({store}) => {
                     key="submit"
                     type="primary"
                     disabled={modalStore.isFormValid}
-                    onClick={action(
+                    onClick={
                         async () => {
                             store.setAttrValues(modalStore.employee)
                                 .then(message.info(`Атрибут был добавлен`))
                         }
-                    )}
+                    }
                 >
                     Сохранить
                 </Button>
             ]}
         >
             <Form
-                labelCol={{
-                    span: 4,
-                }}
-                wrapperCol={{
-                    span: 14,
-                }}
+                labelCol={{span: 4}}
+                wrapperCol={{span: 14}}
                 layout="horizontal"
                 size="small"
             >
@@ -62,7 +57,6 @@ const AttributesModal = observer(({store}) => {
                     label="Название атрибута"
                     style={{width: 1100}}
                     rules={[{required: true, message: 'Необходимо указать название атрибута'}]}
-                    // onChange={(value) => modalStore.changeHandler(value, ATTR_FIELDS.name)}
                 >
                     <Input
                         name={ATTR_FIELDS.name}
@@ -75,14 +69,12 @@ const AttributesModal = observer(({store}) => {
                     name={ATTR_FIELDS.type}
                     label="Тип атрибута"
                     style={{width: 1100}}
-                    // rules={[{required: true, message: 'Необходимо указать тип атрибута'}]}
                     onChange={(value) => modalStore.selectChangeHandler(value, ATTR_FIELDS.type)}
                 >
                     <Select
                         name={ATTR_FIELDS.type}
                         style={{width: 200}}
                         placeholder="Выберите тип атрибута"
-                        // onChange={handleChange}
                         optionLabelProp="label"
                         allowClear="true"
                         onChange={(value, event) => modalStore.selectChangeHandler(value, event, ATTR_FIELDS.type)}

@@ -10,12 +10,11 @@ import {
 import {SyncOutlined} from '@ant-design/icons'
 import 'antd/dist/antd.css'
 import '../styles/TableEmployyes.css'
-import ModalForm from './ModalForm'
+import ModalForm from '../components/EmployeeTable/modals/ModalForm'
 
 import {TableHeaderColumns} from '../components/EmployeeTable/TableHeaderColumn'
 import {expandedRowRender} from '../components/EmployeeTable/ExtenderTableRow'
 import {AddEmployeeButton} from '../components/EmployeeTable/AddEmployeeButton'
-
 
 export const TableEmployees = observer(class extends Component {
     render() {
@@ -29,6 +28,7 @@ export const TableEmployees = observer(class extends Component {
             <Space direction="vertical" style={{padding: 20}}>
                 <AddEmployeeButton store={store}/>
                 <ModalForm store={store}/>
+
                 <Row type="flex" className="flex-item-grow">
                     <Col span={24}>
                         <Spin
@@ -37,8 +37,6 @@ export const TableEmployees = observer(class extends Component {
                             spinning={store.isLoading}
                         >
                             <Table
-                                // style={{maxWidth: '80%'}}
-
                                 className="emp-table"
                                 size="small"
                                 columns={columns}

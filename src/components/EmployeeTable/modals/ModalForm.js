@@ -1,9 +1,9 @@
 import React from "react"
 import {observer} from 'mobx-react'
-import EmployeeModal from '../components/EmployeeTable/modals/EmployeeModal'
-import {MODALS_TITLES} from '../components/EmployeeTable/constant/constant'
-import AttrModal from '../components/EmployeeTable/modals/AttrModal'
-import CoworkersModal from '../components/EmployeeTable/modals/CoworkersModal'
+import EmployeeModal from './EmployeeModal'
+import {MODALS_TITLES} from '../constant/constant'
+import AttrModal from './AttrModal'
+import CoworkersModal from './CoworkersModal'
 
 const ModalForm = observer(({store}) => {
     switch (store.modalTitle) {
