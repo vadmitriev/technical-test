@@ -72,7 +72,6 @@ export const EmployeeModal = observer(({store}) => {
                                         message.info(`Работник был добавлен`)
                                     }
                                 })
-
                         }
                     )}
                 >
@@ -81,12 +80,8 @@ export const EmployeeModal = observer(({store}) => {
             ]}
         >
             <Form
-                labelCol={{
-                    span: 4,
-                }}
-                wrapperCol={{
-                    span: 14,
-                }}
+                labelCol={{span: 4}}
+                wrapperCol={{span: 14}}
                 layout="horizontal"
                 size="small"
             >
@@ -233,7 +228,7 @@ export const EmployeeModal = observer(({store}) => {
                         allowClear="true"
                         defaultValue={store.employee
                             ? store.coworkersById
-                            : []}
+                            : ''}
                         onChange={(value) => modalStore.selectChangeHandler(value, "coworkers")}
                     >
                         {coworkers}

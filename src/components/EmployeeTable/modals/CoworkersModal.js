@@ -2,9 +2,10 @@ import {observer} from 'mobx-react'
 import {ModalStore} from '../../../stores/ModalStore'
 import {Button, Form, message, Modal, Select} from 'antd'
 import {action} from 'mobx'
+import React from 'react'
 
 export const CoworkersModal = observer(({store}) => {
-     const modalStore = new ModalStore(store.employee)
+    const modalStore = new ModalStore(store.employee)
 
     const coworkers = store.coworkersShortNames.map(name => {
         return <Select.Option value={name}>{name}</Select.Option>
@@ -30,7 +31,7 @@ export const CoworkersModal = observer(({store}) => {
                     type="primary"
                     onClick={action(
                         async () => {
-                            store.setCoworkers(modalStore)
+                            store.setCoworkers(modalStore.employee.coworkers)
                                 .then(message.info(`Коллеги были изменены`))
                         }
                     )}
@@ -40,12 +41,8 @@ export const CoworkersModal = observer(({store}) => {
             ]}
         >
             <Form
-                labelCol={{
-                    span: 4,
-                }}
-                wrapperCol={{
-                    span: 14,
-                }}
+                labelCol={{span: 4}}
+                wrapperCol={{span: 14}}
                 layout="horizontal"
                 size="small"
             >
@@ -61,11 +58,10 @@ export const CoworkersModal = observer(({store}) => {
                         placeholder="Выберите коллег"
                         optionLabelProp="label"
                         allowClear="true"
-                        defaultValue={modalStore.employee
-                            ? action(() => modalStore.employee.coworkersById)
-                            : ''
-                        }
-                        onChange={(value) => modalStore.selectChangeHandler(value, "coworkers")}
+                        defaultValue={store.employee
+                            ? store.coworkersById
+                            : ''}
+                        onChange={(value, event) => modalStore.selectChangeHandler(value, event, "coworkers")}
                     >
                         {coworkers}
                     </Select>

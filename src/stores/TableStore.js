@@ -241,18 +241,29 @@ class TableStore {
         }, 700)
     }
 
-    setCoworkers(coworkers) {
+    setCoworkers(workers) {
         if (!this.employee) {
             return
         }
+        this.setVisible(false)
         this.isLoading = true
-        return promise(() => {
-            // this.employee.coworkers.push(coworkers)
+        const coworkers = {...workers}
 
+        return promise(() => {
+            this.employee.coworkers.clear()
+            this.employeeList.forEach(emp => {
+                const shortName = this.calcShortName(emp)
+
+                if (Object.values(coworkers).includes(shortName)) {
+                    this.employee.coworkers.push(emp.id)
+                    if (emp.coworkers && !emp.coworkers.includes(this.employee.id)) {
+                        action(() => emp.coworkers.push(this.employee.id))
+                    }
+                }
+            })
             this.saveInLS()
-            this.setVisible(false)
             this.isLoading = false
-        }, 700)
+        }, 500)
     }
 
     setError({message}) {

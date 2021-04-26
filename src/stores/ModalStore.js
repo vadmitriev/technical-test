@@ -36,6 +36,7 @@ export class ModalStore {
     }
 
     selectChangeHandler(value, event, key) {
+        console.log('select value:', value, '; event: ', event, ' ; key: ', key)
         this.currentEmp[key] = value
     }
 
